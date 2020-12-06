@@ -12,7 +12,7 @@ When spring boot runs (see maven targets), you can call
 - start container
 ```bash
 docker run --name fusee2-db \
--p 127.0.0.1:5432:5432 \
+-p 127.0.0.1:5439:5432 \
 -e POSTGRES_USER=dbuser \
 -e POSTGRES_PASSWORD=fuseE3000! \
 -e POSTGRES_DB=fusee \
