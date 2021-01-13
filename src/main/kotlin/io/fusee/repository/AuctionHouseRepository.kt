@@ -1,6 +1,7 @@
 package io.fusee.repository
 
 import io.fusee.entity.AuctionHouse
+import io.fusee.entity.AuctionHouseTable
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
@@ -12,29 +13,24 @@ import java.util.*
 class AuctionHouseRepository {
 
     fun findAll(): List<AuctionHouse> {
-        val list = mutableListOf<AuctionHouse>()
-        transaction {
-            for (auctionHouse in AuctionHouse.all()) {
-                list.add(auctionHouse)
-                println("Added Auction House: ${auctionHouse.name}, id: ${auctionHouse.id}")
-            }
+        return transaction {
+            AuctionHouse.all().toList()
         }
-        return list
     }
 
-    fun addAuctionHouse(name: String, url: String, description: String?): UUID? {
+    fun addAuctionHouse(name: String, url: String?, description: String?): EntityID<UUID> {
 
         var new: EntityID<UUID>? = null
 
-        transaction {
-            new = AuctionHouse.new {
+        return transaction {
+             AuctionHouse.new {
                 this.name = name
                 this.url = url
                 this.description = description
             }.id
         }
 
-        return new?.value
+//        return new?.value
     }
 
 }

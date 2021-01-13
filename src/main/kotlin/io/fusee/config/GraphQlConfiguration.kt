@@ -10,6 +10,8 @@ import graphql.schema.CoercingSerializeException
 import graphql.schema.Coercing
 
 import graphql.schema.GraphQLScalarType
+import org.jetbrains.exposed.dao.DaoEntityID
+import org.jetbrains.exposed.dao.id.EntityID
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.*
@@ -29,6 +31,13 @@ class GraphQlConfiguration {
             .coercing(object : Coercing<UUID, String> {
                 @Throws(CoercingSerializeException::class)
                 override fun serialize(dataFetcherResult: Any): String {
+                    if (dataFetcherResult is EntityID<*>) {
+                        return (dataFetcherResult._value as? UUID)?.toString()
+                            ?: throw IllegalArgumentException(
+                                ("Unable to serialize " + dataFetcherResult
+                                        + " as UUID to String. Wrong Type. Expected EntityID<*>.class, Got " + dataFetcherResult.javaClass)
+                            )
+                    }
                     return (dataFetcherResult as? UUID)?.toString()
                         ?: throw IllegalArgumentException(
                             ("Unable to serialize " + dataFetcherResult

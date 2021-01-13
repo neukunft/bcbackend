@@ -3,14 +3,19 @@ package io.fusee.entity
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.*
 
+object AuctionHouseTable : UUIDTable("auction_house") {
+    val name = text("name").uniqueIndex()
+    val description = text("description").nullable()
+    val url = text("url").nullable().uniqueIndex()
+}
 
 class AuctionHouse(id: EntityID<UUID>): UUIDEntity(id) {
-    companion object: UUIDEntityClass<AuctionHouse>(AuctionHouses)
+    companion object: UUIDEntityClass<AuctionHouse>(AuctionHouseTable)
 
-    var name by AuctionHouses.name
-    var description by AuctionHouses.description
-    var url by AuctionHouses.url
-    var someThingNew by AuctionHouses.someThingNew
+    var name by AuctionHouseTable.name
+    var description by AuctionHouseTable.description
+    var url by AuctionHouseTable.url
 }
