@@ -1,7 +1,18 @@
 spring:
   main:
     banner-mode: off
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5439/fusee
+    username: dbuser
+    password: fuseE3000!
+  flyway:
+    enabled: true
+    baseline-version: 1
 
+app:
+  flyway:
+    info: true
+    strategy: MIGRATE
 
 logging:
   level:
