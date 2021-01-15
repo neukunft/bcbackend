@@ -1,3 +1,4 @@
+create schema if not exists import;
 create table import.auctions
 (
     id                        uuid                  not null,
@@ -21,51 +22,15 @@ create table import.auctions
     is_online_only            boolean               not null,
     requires_manual_attention boolean               not null,
     was_only_source_filemaker boolean               not null,
-    filemaker_id              uuid
+    filemaker_id              uuid,
+    fk_auction_house_location uuid
 );
-
-update import.auctions
-set base_currency = 'CHF'
-where location in ('Geneva', 'Zürich', 'Basel')
-  and base_currency isnull ;
-
-update import.auctions
-set base_currency = 'USD'
-where location in ('New York', 'Los Angeles')
-  and base_currency isnull ;
-
-update import.auctions
-set base_currency = 'EUR'
-where location in ('Mönchengladbach', 'Düsseldorf', 'Frankfurt', 'Madrid', 'Amsterdam', 'Hamburg', 'Mannheim', 'Cologne', 'Lindau', 'Stuttgart', 'Reutlingen', 'Paris', 'Milano', 'Rome')
-  and base_currency isnull ;
-
-
-
-update import.auctions
-set base_currency = 'HKD'
-where location in ('Hong Kong')
-  and base_currency isnull ;
-
-update import.auctions
-set base_currency = 'GBP'
-where location in ('London', 'Oxford', 'Newbury, UK')
-  and base_currency isnull ;
-
-update import.auctions
-set base_currency = 'DEM'
-where location in ('Aachen')
-  and base_currency isnull ;
-
-select distinct location, count(location)
-from import.auctions
-where base_currency isnull
-group by location;
 
 -- create locations
 create table import.location
 (
-    id   uuid primary key default gen_random_uuid(),
-    name text not null,
+    id            uuid primary key default gen_random_uuid(),
+    name          text not null,
     base_currency text,
     unique (name)
 );
@@ -120,4 +85,3 @@ from import.auction_house_location ahl
 where a.location_detail = ahl.location_detail
   and a.location = l.name
   and a.auction_house_name = ah.name;
-

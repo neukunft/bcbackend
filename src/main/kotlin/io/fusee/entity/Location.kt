@@ -4,24 +4,21 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "auction_house")
-open class AuctionHouse {
+@Table(name = "location")
+open class Location {
 
     @get:Id
     @get:GeneratedValue
     @get:Column(name = "id")
     open var id: UUID? = null
 
-    @get:OneToMany(mappedBy = "auctionHouse")
+    @get:OneToMany(mappedBy = "location")
     open var auctionHouseLocations = mutableListOf<AuctionHouseLocation>()
 
-    @get:Column(name = "name")
+    @Column(name = "name")
     open var name: String? = null
 
-    @get:Column(name = "description")
-    open var description: String? = null
-
-    @get:Column(name = "url")
-    open var url: String? = null
+    @Column(name = "base_currency")
+    open var baseCurrency: String? = null
 
 }

@@ -1,6 +1,6 @@
 package io.fusee.repository
 
-import io.fusee.entity.AuctionHouse
+import io.fusee.entity.Location
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -8,4 +8,4 @@ import java.util.*
 
 @Repository
 @Transactional
-interface AuctionHouseRepository : JpaRepository<AuctionHouse, UUID>
+interface LocationRepository : JpaRepository<Location, UUID>

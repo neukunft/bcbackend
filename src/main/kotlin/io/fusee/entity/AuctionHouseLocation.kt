@@ -1,19 +1,26 @@
 package io.fusee.entity
 
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.*
+import javax.persistence.*
 
-object AuctionHouseLocationTable: UUIDTable("auction_house_location") {
-    val auctionHouse = reference("fk_auction_house", AuctionHouseTable)
-    val locationDetail = text("location_detail").nullable()
-}
+@Entity
+@Table(name = "auction_house_location")
+open class AuctionHouseLocation {
 
-class AuctionHouseLocation(id: EntityID<UUID>): UUIDEntity(id) {
-    companion object: UUIDEntityClass<AuctionHouseLocation>(AuctionHouseLocationTable)
+    @get:Id
+    @get:GeneratedValue
+    @get:Column(name = "id")
+    open var id: UUID? = null
 
-    var auctionHouse by AuctionHouse referencedOn AuctionHouseLocationTable.auctionHouse
-    var locationDetail by AuctionHouseLocationTable.locationDetail
+    @Column(name = "location_detail")
+    open var locationDetail: String? = null
+
+    @get:ManyToOne
+    @get:JoinColumn(name = "fk_auction_house")
+    open lateinit var auctionHouse: AuctionHouse
+
+    @get:ManyToOne
+    @get:JoinColumn(name = "fk_location")
+    open lateinit var location: Location
+
 }

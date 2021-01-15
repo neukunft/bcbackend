@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.Instant
 
-enum class FlywayStrategyName { SKIP, VALIDATE, MIGRATE, REPAIR, BASELINE; }
+enum class FlywayStrategyName { SKIP, VALIDATE, MIGRATE, CLEAN, REPAIR, BASELINE; }
 
 @Component
 data class FlywayConfig(
@@ -71,6 +71,16 @@ class FlywayConfiguration(
                 logger.info("==== MIGRATE !!!!! flyway: ${config.strategyName} ${Instant.now()} ...")
                 try {
                     flyway.migrate()
+                    Unit
+                } catch (all: Throwable) {
+                    logger.error("flyway FAILED! ${all.message}", all)
+                    throw  all
+                }
+            }
+            FlywayStrategyName.CLEAN -> {
+                logger.info("==== CLEAN !!!!! flyway: ${config.strategyName} ${Instant.now()} ...")
+                try {
+                    flyway.clean()
                     Unit
                 } catch (all: Throwable) {
                     logger.error("flyway FAILED! ${all.message}", all)

@@ -4,6 +4,7 @@ type AuctionHouse {
     name: String
     url: String
     description: String
+    auctionHouseLocations: [AuctionHouseLocation]
 }
 
 
