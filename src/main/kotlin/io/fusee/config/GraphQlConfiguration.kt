@@ -1,7 +1,10 @@
 package io.fusee.config
 
+import graphql.execution.ExecutionStrategy
 import graphql.language.StringValue
 import graphql.schema.*
+import io.fusee.service.AsyncTransactionalExecutionStrategyService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.util.*
@@ -11,7 +14,21 @@ import java.util.*
 // ###################################################
 
 @Configuration
-class GraphQlConfiguration {
+class GraphQlConfiguration (
+    private val asyncTransactionalExecutionStrategyService: AsyncTransactionalExecutionStrategyService
+    ) {
+
+
+    /*
+    ** https://blog.akquinet.de/2020/04/16/part-2-graphql-with-spring-boot-jpa-and-kotlin/
+    */
+    @Bean
+    fun executionStrategies(): Map<String, ExecutionStrategy> {
+        val executionStrategyMap = HashMap<String, ExecutionStrategy>()
+        executionStrategyMap["queryExecutionStrategy"] = asyncTransactionalExecutionStrategyService
+        return executionStrategyMap
+    }
+
     @Bean
     fun addScalarUuid(): GraphQLScalarType {
         return GraphQLScalarType
