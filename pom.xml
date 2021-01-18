@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <kotlin.version>1.4.20</kotlin.version>
+        <kotlin.version>1.4.21</kotlin.version>
     </properties>
 
     <repositories>
@@ -81,10 +81,15 @@
             <artifactId>kotlinx-coroutines-core</artifactId>
             <version>1.4.2</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.graphql-java</groupId>-->
+<!--            <artifactId>graphiql-spring-boot-starter</artifactId>-->
+<!--            <version>5.0.2</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphiql-spring-boot-starter</artifactId>
-            <version>5.0.2</version>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>altair-spring-boot-starter</artifactId>
+            <version>8.1.1</version>
         </dependency>
         <dependency>
             <groupId>com.graphql-java</groupId>
@@ -100,6 +105,11 @@
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging-jvm</artifactId>
             <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-52</artifactId>
+            <version>2.10.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
