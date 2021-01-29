@@ -1,0 +1,9 @@
+type FileName {
+    id: UUID!
+    file: File
+    originalFilename: String
+}
+
+extend type Query {
+    getFileNames: [FileName]
+}

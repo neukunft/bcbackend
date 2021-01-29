@@ -11,12 +11,12 @@ When spring boot runs (see maven targets), you can call
 - Install docker based on your platform
 - start container
 ```bash
-docker run --name fusee2-db \
--p 127.0.0.1:5439:5432 \
+docker run --name bluecat-db \
+-p 127.0.0.1:5432:5432 \
 -e POSTGRES_USER=dbuser \
--e POSTGRES_PASSWORD=fuseE3000! \
--e POSTGRES_DB=fusee \
--v fusee2-data:/var/lib/postgresql \
+-e POSTGRES_PASSWORD=dbpasswd \
+-e POSTGRES_DB=bluecat \
+-v bluecat_db_data:/var/lib/postgresql \
 -d postgres:13-alpine
 ```
 - sudo docker start postgres (use run only for initial creation and start)

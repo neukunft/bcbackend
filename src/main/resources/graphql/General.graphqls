@@ -5,6 +5,8 @@ scalar UUID
 type Query {
     getAuctionHouses: [AuctionHouse]
     getAuctionHouseLocations: [AuctionHouseLocation]
+    getLocations: [Location]
+    getAuctions: [Auction]
 }
 
 type Mutation {

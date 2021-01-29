@@ -2,18 +2,12 @@ spring:
   main:
     banner-mode: off
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5439/fusee
+    url: jdbc:postgresql://127.0.0.1:5432/bluecat
     username: dbuser
-    password: fuseE3000!
+    password: dbpasswd
   flyway:
     enabled: true
     baseline-version: 1
-#    ANTI-PATTERN ! --> todo: make Transaction Manager work
-#  jpa:
-#    properties:
-#      hibernate:
-#        enable_lazy_load_no_trans: true
-
 
 app:
   flyway:

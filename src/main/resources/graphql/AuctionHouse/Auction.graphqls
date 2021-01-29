@@ -1,0 +1,21 @@
+type Auction{
+    id: UUID!
+    auctionHouseLocation: AuctionHouseLocation
+    catalogFile: File
+    resultFile: File
+    dateFrom: String
+    dateTo: String
+    title: String
+    comment: String
+    codename: String
+    totalLots: Int
+    saleTotal: Int
+    url: String
+    wasCrawled: Boolean
+    webRecord: String
+    filemakerRecord: String
+    isOnlineOnly: Boolean
+    requiresManualAttention: Boolean
+    filemakerId: UUID
+    wasOnlySourceFilemaker: Boolean
+}
