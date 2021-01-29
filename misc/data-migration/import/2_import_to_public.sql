@@ -4,7 +4,7 @@ insert into public.file (id, shasum256, filepath, filename, extension, filetype,
 select id, shasum256, filepath, filename, extension, filetype, filesize, mime_type
 from import.file;
 
-insert into public.file_name(id, fk_vwe_file, shasum256, original_filepath, original_filename, original_extension)
+insert into public.file_name(id, fk_file, shasum256, original_filepath, original_filename, original_extension)
 select id, fk_vwe_file, shasum256, original_filepath, original_filename, original_extension
 from import.file_name;
 

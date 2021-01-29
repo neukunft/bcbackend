@@ -17,7 +17,7 @@ create table file
 create table file_name
 (
     id                 uuid primary key default gen_random_uuid() not null,
-    fk_vwe_file        uuid,
+    fk_file        uuid,
     shasum256          varchar(64),
     original_filepath  text,
     original_filename  text,
