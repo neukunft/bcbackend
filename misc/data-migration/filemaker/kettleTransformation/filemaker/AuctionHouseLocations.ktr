@@ -478,7 +478,8 @@
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
-    <sql>CREATE TABLE IF NOT EXISTS import.auction_house_location
+    <sql>DROP TABLE IF EXISTS vwe.auction_house_location;
+CREATE TABLE IF NOT EXISTS vwe.auction_house_location
 (
   clearName TEXT
 , CLIPBOARD TEXT
@@ -745,8 +746,8 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
-    <schema>import</schema>
+    <connection>docker_database</connection>
+    <schema>vwe</schema>
     <table>auction_house_location</table>
     <commit>1000</commit>
     <truncate>Y</truncate>

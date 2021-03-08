@@ -6,4 +6,9 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface AuctionRepository : JpaRepository<Auction, UUID>
+interface AuctionRepository : JpaRepository<Auction, UUID> {
+
+    fun findByDateFromGreaterThan(date: Date): MutableIterable<Auction>
+}
+
+

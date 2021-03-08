@@ -1,8 +1,12 @@
 type AuctionHouseLocation {
-    id: UUID!
+    id: ID!
     auctionHouse: AuctionHouse
     location: Location
     auctions: [Auction]
+    locationDetail: String
+}
+
+type AuctionHouseLocationList {
     locationDetail: String
 }
 

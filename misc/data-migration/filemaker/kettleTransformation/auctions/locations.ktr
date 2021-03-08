@@ -473,7 +473,7 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <filename>/Volumes/media/fusee/DATA_IMPORT/bluecat/auction_house_location.csv</filename>
+    <filename>/Volumes/media/fusee/DATA_IMPORT/bluecat/location.csv</filename>
     <filename_field />
     <rownum_field />
     <include_filename>N</include_filename>
@@ -500,35 +500,46 @@
         <trim_type>none</trim_type>
       </field>
       <field>
-        <name>fk_auction_house</name>
-        <type>String</type>
-        <format />
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>36</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>fk_location</name>
-        <type>String</type>
-        <format />
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group>,</group>
-        <length>36</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-      <field>
-        <name>location_detail</name>
+        <name>city</name>
         <type>String</type>
         <format />
         <currency>$</currency>
         <decimal>.</decimal>
         <group>,</group>
         <length>34</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>country</name>
+        <type>String</type>
+        <format />
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>19</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>base_currency</name>
+        <type>String</type>
+        <format />
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>comment</name>
+        <type>String</type>
+        <format />
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>-1</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
       </field>
@@ -564,13 +575,14 @@
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
     <sql>CREATE SCHEMA IF NOT EXISTS import;
-DROP TABLE IF EXISTS import.auction_house_location;
-create table import.auction_house_location
+DROP TABLE IF EXISTS import.location;
+create table import.location
 (
     id                        text
-,	fk_auction_house	text
-,	fk_location	text
-,	location_detail	text
+,	city	text
+,	country	text
+,	base_currency	text
+,	comment	text
     
 );</sql>
     <set_params>N</set_params>
@@ -607,7 +619,7 @@ create table import.auction_house_location
     </partitioning>
     <connection>docker_database</connection>
     <schema>import</schema>
-    <table>auction_house_location</table>
+    <table>location</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -628,16 +640,20 @@ create table import.auction_house_location
         <stream_name>id</stream_name>
       </field>
       <field>
-        <column_name>fk_auction_house</column_name>
-        <stream_name>fk_auction_house</stream_name>
+        <column_name>city</column_name>
+        <stream_name>city</stream_name>
       </field>
       <field>
-        <column_name>fk_location</column_name>
-        <stream_name>fk_location</stream_name>
+        <column_name>country</column_name>
+        <stream_name>country</stream_name>
       </field>
       <field>
-        <column_name>location_detail</column_name>
-        <stream_name>location_detail</stream_name>
+        <column_name>base_currency</column_name>
+        <stream_name>base_currency</stream_name>
+      </field>
+      <field>
+        <column_name>comment</column_name>
+        <stream_name>comment</stream_name>
       </field>
     </fields>
     <attributes />

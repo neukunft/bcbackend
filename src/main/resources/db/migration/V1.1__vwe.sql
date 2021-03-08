@@ -1,386 +1,368 @@
--- CREATE SCHEMA IF NOT EXISTS public;
---
--- CREATE EXTENSION IF NOT EXISTS pgcrypto;
---
--- CREATE TYPE date_precision AS ENUM ('YEAR', 'MONTH', 'DAY');
---
--- CREATE TYPE event_type AS ENUM ('AUCTION', 'OTHER');
---
--- CREATE TYPE auction_status AS ENUM ('NEW', 'LOTS ADDED', 'FINISHED');
---
--- CREATE TYPE currencycode AS ENUM ('USD', 'EUR', 'HKD', 'GBP', 'CHF', 'DEM', 'ITL', 'DKK', 'JPY', 'CNY');
---
--- CREATE TABLE auction_house
--- (
---     id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     name text
--- );
---
--- CREATE TABLE auction_house_location
--- (
---     id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_auction_house UUID REFERENCES auction_house,
---     location         text
--- );
---
--- CREATE TABLE vwe_auction
--- (
---     id                              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_auction_house_location       UUID REFERENCES auction_house_location,
---     internal_auction_name           text,
---     comment                         text,
---     date                            date,
---     date_from                       date,
---     date_to                         date,
---     date_precision                  date_precision,
---     date_used_for_price_calculation date,
---     sale_total                      numeric,
---     status                          auction_status   DEFAULT 'NEW',
---     UNIQUE (date_from, date_to, internal_auction_name, fk_auction_house_location)
--- );
---
--- CREATE TABLE public.maker
--- (
---     id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
---     name text UNIQUE
--- );
---
--- CREATE TABLE public.reference
--- (
---     id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_maker   uuid REFERENCES maker,
---     name       text,
---     search_idx tsvector GENERATED ALWAYS AS (to_tsvector('english', coalesce(name, ''))) STORED,
---     UNIQUE (name, fk_maker)
--- );
--- CREATE INDEX reference_search_idx ON reference USING GIN (search_idx);
---
--- CREATE TABLE public.reference_series
--- (
---     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_reference uuid REFERENCES reference,
---     series       smallint,
---     UNIQUE (fk_reference, series)
--- );
---
--- CREATE TABLE public.reference_series_model
--- (
---     id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_reference_series uuid REFERENCES reference_series,
---     metal_identifier    text,
---     price_category      integer,
---     UNIQUE (fk_reference_series, metal_identifier)
--- );
---
--- CREATE TABLE public.reference_variant
--- (
---     id                              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_reference_series_model       UUID REFERENCES reference_series_model,
---     caliber                         text,
---     comment                         text,
---     common_name                     text,
---     common_name_detailed            text,
---     diameter                        double precision,
---     thickness                       double precision,
---     lugs_pdt                        text,
---     manufactured_from               date,
---     manufactured_from_addition      text,
---     manufactured_from_is_exact      boolean,
---     manufactured_from_precision     date_precision,
---     manufactured_to                 date,
---     manufactured_to_addition        text,
---     manufactured_to_is_exact        boolean,
---     manufactured_to_precision       date_precision,
---     produced_addition               text,
---     quantity_found                  smallint,
---     quantity_produced               double precision,
---     reference_variant_original_name text,
---     --reference                       text,
---     variant1                        text,
---     variant2                        text,
---     --metal                           text,
---     reference_class                 text, -- to be moved to reference?
---     shape                           text,
---     dimensions                      text,
---     series                          smallint,
---     type                            text,
---     weight                          double precision,
---     width                           double precision,
---     is_verified                     boolean,
---     jewels                          text,
---     case_description                text,
---     key                             text,
---     gauge                           text,
---     bezel                           text,
---     dial_color                      text,
---     index_color                     text,
---     hands_color                     text,
---     hands_style                     text,
---     availability                    text,
---     dial_kind                       text,
---     index_style                     text,
---     index_design                    text,
---     index_numerals                  text,
---     index_symbol                    text,
---     index_sertissage                text,
---     variant_name                    text,
---     is_official_variant             boolean,
---     is_relevant_statistics          boolean,
---     last_retail                     text,
---     retail_2008                     text,
---     preview_image_path              text
---
--- );
---
--- CREATE TABLE public.retail_price
--- (
---     id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_reference_variant UUID REFERENCES reference_variant,
---     price                integer,
---     date                 date,
---     date_precision       date_precision,
---     currency             currencycode,
---     UNIQUE (fk_reference_variant, date)
--- );
---
--- CREATE TABLE public.no_reference_info
--- (
---     id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     heading                   TEXT,
---     form                      TEXT,
---     class                     TEXT,
---     "start"                   TEXT,
---     "end"                     TEXT,
---     quantity                  TEXT,
---     shape                     TEXT,
---     model                     TEXT,
---     so_called                 TEXT,
---     type                      TEXT,
---     jewels                    TEXT,
---     calibre                   TEXT,
---     found                     TEXT,
---     mvt_number                TEXT,
---     comment                   TEXT,
---     "case"                    TEXT,
---     size                      TEXT,
---     height                    TEXT,
---     weight                    TEXT,
---     "key"                     TEXT,
---     lugs_pdt                  TEXT,
---     gauge                     TEXT,
---     bezel                     TEXT,
---     dial                      TEXT,
---     code                      TEXT,
---     stern                     TEXT,
---     idx                       TEXT,
---     hands                     TEXT,
---     more_comment              TEXT,
---     retail_08                 TEXT,
---     last_retail_or_appearance TEXT,
---     y2017                     TEXT,
---     y2015_2016                TEXT,
---     y2013_2014                TEXT,
---     y2011_2012                TEXT,
---     y2009_2010                TEXT,
---     y2008                     TEXT,
---     y2007                     TEXT,
---     y2006                     TEXT,
---     y2005                     TEXT,
---     y2004                     TEXT,
---     y2003                     TEXT,
---     y2002                     TEXT,
---     y2001                     TEXT,
---     y2000                     TEXT,
---     y1999                     TEXT,
---     y1998                     TEXT,
---     y1997                     TEXT,
---     y1996                     TEXT,
---     y1995                     TEXT,
---     y1994                     TEXT,
---     y1993                     TEXT,
---     y1992                     TEXT,
---     y1991                     TEXT,
---     y1990                     TEXT,
---     y1988                     TEXT,
---     y1986                     TEXT,
---     y1984                     TEXT,
---     y1982                     TEXT,
---     y1980                     TEXT,
---     y1977                     TEXT,
---     y1974                     TEXT,
---     y1970                     TEXT,
---     y1965                     TEXT,
---     y1960                     TEXT,
---     y1955                     TEXT,
---     y1950                     TEXT,
---     y1945                     TEXT,
---     y1940                     TEXT,
---     y1935                     TEXT,
---     y1930                     TEXT,
---     y1920                     TEXT,
---     y1910                     TEXT,
---     y1900                     TEXT,
---     y1875                     TEXT,
---     y1850                     TEXT
--- );
---
--- CREATE TABLE watch
--- (
---     id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_reference_variant      UUID REFERENCES reference_variant,
---     fk_no_reference_info      UUID REFERENCES no_reference_info,
---     fk_maker                  UUID REFERENCES maker, --is set when vwe_ref is empty
---     case_lower_range          text,
---     case_number               text,
---     case_upper_range          text,
---     comment                   text,
---     has_been_changed          boolean,
---     is_fake                   boolean,
---     is_unknown_exact_case     boolean,
---     is_unknown_exact_movement boolean,
---     movement_lower_range      text,
---     movement_number           text,
---     movement_upper_range      text,
---     is_verified               boolean,
---     quantity_produced         smallint,
---     needs_manual_verification boolean,
---     search_idx                tsvector
---                               GENERATED ALWAYS AS (
---                                           setweight(to_tsvector('pg_catalog.english',
---                                                                 coalesce(movement_number, '')),
---                                                     'A') ||
---                                           setweight(to_tsvector('pg_catalog.english',
---                                                                 coalesce(case_number, '')),
---                                                     'B') ||
---                                           setweight(to_tsvector('pg_catalog.english',
---                                                                 coalesce(comment, '')),
---                                                     'D')
---                                   ) STORED,
---     UNIQUE (movement_number, case_number)
--- );
--- CREATE INDEX watch_search_idx ON watch USING GIN (search_idx);
---
--- CREATE TABLE vwe_auction_lot
--- (
---     id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_auction             UUID REFERENCES vwe_auction,
---     fk_watch               UUID REFERENCES watch,
---     additional_information boolean,
---     bracelet_type          text,
---     certificate_retailer   text,
---     comment                text,
---     currency               currencycode,
---     estimate_from          numeric,
---     estimate_from_in_usd   numeric,
---     estimate_to            numeric,
---     estimate_to_in_usd     numeric,
---     has_box                boolean,
---     has_bracelet           boolean,
---     has_certificate        boolean,
---     has_extra_item         boolean,
---     has_not_been_sold      boolean,
---     is_empty_price         boolean,
---     is_extract_of_archives boolean,
---     lot_number             integer,
---     lot_number_addition    text,
---     price                  numeric,
---     price_in_usd           numeric,
---     price_estimated        numeric,
---     was_withdrawn          boolean,
---     is_verified            boolean,
---     conversion_date        date,
---     conversion_rate        numeric
--- );
---
--- CREATE TABLE vwe_condition
--- (
---     id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_auctionLot        UUID REFERENCES vwe_auction_lot,
---     "date"               date,
---     bracelet_type        text,
---     case_condition       text,
---     case_rating          smallint,
---     certificate_retailer text,
---     description          text,
---     dial_condition       text,
---     dial_rating          smallint,
---     has_box              boolean,
---     has_bracelet         boolean,
---     has_certificate      boolean,
---     has_extra_item       boolean,
---     movement_condition   text,
---     movement_rating      smallint
--- );
---
--- CREATE TABLE vwe_abbreviation
--- (
---     id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     abbreviation text,
---     translation  text,
---     UNIQUE (abbreviation)
--- );
---
--- CREATE TABLE vwe_image
--- (
---     id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     can_be_deleted          boolean,
---     case_number             text,
---     original_file_name      text,
---     original_file_path      text,
---     image_MD5               text unique,
---     internal_file_name      text unique,
---     internal_file_path      text,
---     movement_number         text,
---     reference               text,
---     status                  text,
---     subtype                 text,
---     tags                    text[],
---     type                    text,
---     extension               text,
---     is_copyright_uncritical boolean
--- );
---
--- CREATE TABLE vwe_image_lookup
--- (
---     id       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_watch UUID REFERENCES watch,
---     fk_image UUID REFERENCES vwe_image,
---     UNIQUE (fk_image, fk_watch)
--- );
---
--- CREATE TABLE vwe_watch_feature
--- (
---     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_watch        UUID references watch,
---     fk_abbreviation UUID
--- );
---
--- CREATE TABLE event_description
--- (
---     id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     short_description text,
---     description       text
--- );
---
--- CREATE TABLE event
--- (
---     id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     fk_watch             UUID REFERENCES watch,
---     fk_auction_lot       UUID REFERENCES vwe_auction_lot,
---     fk_event_description UUID REFERENCES event_description,
---     date                 date,
---     date_precision       date_precision
--- );
---
--- CREATE TABLE exchange_rate
--- (
---     id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---     currency      currencycode,
---     base_currency currencycode     DEFAULT 'USD',
---     date          date,
---     value         numeric,
---     UNIQUE (currency, base_currency, date, value)
--- );
---
--- CREATE SEQUENCE hibernate_sequence;
---
+CREATE SCHEMA IF NOT EXISTS public;
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TYPE date_precision AS ENUM ('YEAR', 'MONTH', 'DAY');
+
+CREATE TYPE event_type AS ENUM ('AUCTION', 'OTHER');
+
+CREATE TYPE auction_status AS ENUM ('NEW', 'LOTS ADDED', 'FINISHED');
+
+CREATE TYPE currencycode AS ENUM ('USD', 'EUR', 'HKD', 'GBP', 'CHF', 'DEM', 'ITL', 'DKK', 'JPY', 'CNY');
+
+CREATE TABLE vwe_auction_house
+(
+    id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name text
+);
+
+CREATE TABLE vwe_auction_house_location
+(
+    id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_auction_house UUID REFERENCES vwe_auction_house,
+    location         text
+);
+
+CREATE TABLE vwe_auction
+(
+    id                              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_auction_house_location       UUID REFERENCES vwe_auction_house_location,
+    internal_auction_name           text,
+    comment                         text,
+    date                            date,
+    date_from                       date,
+    date_to                         date,
+    date_precision                  date_precision,
+    date_used_for_price_calculation date,
+    sale_total                      numeric,
+    status                          auction_status   DEFAULT 'NEW',
+    UNIQUE (date_from, date_to, internal_auction_name, fk_auction_house_location)
+);
+
+CREATE TABLE public.maker
+(
+    id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    name text UNIQUE
+);
+
+CREATE TABLE public.reference
+(
+    id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_maker   uuid REFERENCES maker,
+    name       text,
+    search_idx tsvector GENERATED ALWAYS AS (to_tsvector('english', coalesce(name, ''))) STORED,
+    UNIQUE (name, fk_maker)
+);
+CREATE INDEX reference_search_idx ON reference USING GIN (search_idx);
+
+CREATE TABLE public.reference_series
+(
+    id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_reference uuid REFERENCES reference,
+    series       smallint,
+    UNIQUE (fk_reference, series)
+);
+
+CREATE TABLE public.reference_series_model
+(
+    id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_reference_series uuid REFERENCES reference_series,
+    metal_identifier    text,
+    price_category      integer,
+    UNIQUE (fk_reference_series, metal_identifier)
+);
+
+CREATE TABLE public.reference_variant
+(
+    id                              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_reference_series_model       UUID REFERENCES reference_series_model,
+    caliber                         text,
+    comment                         text,
+    common_name                     text,
+    common_name_detailed            text,
+    diameter                        double precision,
+    thickness                       double precision,
+    lugs_pdt                        text,
+    manufactured_from               date,
+    manufactured_from_addition      text,
+    manufactured_from_is_exact      boolean,
+    manufactured_from_precision     date_precision,
+    manufactured_to                 date,
+    manufactured_to_addition        text,
+    manufactured_to_is_exact        boolean,
+    manufactured_to_precision       date_precision,
+    produced_addition               text,
+    quantity_found                  smallint,
+    quantity_produced               double precision,
+    reference_variant_original_name text,
+    --reference                       text,
+    variant1                        text,
+    variant2                        text,
+    --metal                           text,
+    reference_class                 text, -- to be moved to reference?
+    shape                           text,
+    dimensions                      text,
+    series                          smallint,
+    type                            text,
+    weight                          double precision,
+    width                           double precision,
+    is_verified                     boolean,
+    jewels                          text,
+    case_description                text,
+    key                             text,
+    gauge                           text,
+    bezel                           text,
+    dial_color                      text,
+    index_color                     text,
+    hands_color                     text,
+    hands_style                     text,
+    availability                    text,
+    dial_kind                       text,
+    index_style                     text,
+    index_design                    text,
+    index_numerals                  text,
+    index_symbol                    text,
+    index_sertissage                text,
+    variant_name                    text,
+    is_official_variant             boolean,
+    is_relevant_statistics          boolean,
+    last_retail                     text,
+    retail_2008                     text,
+    preview_image_path              text
+
+);
+
+CREATE TABLE public.retail_price
+(
+    id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_reference_variant UUID REFERENCES reference_variant,
+    price                integer,
+    date                 date,
+    date_precision       date_precision,
+    currency             currencycode,
+    UNIQUE (fk_reference_variant, date)
+);
+
+CREATE TABLE public.no_reference_info
+(
+    id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    heading                   TEXT,
+    form                      TEXT,
+    class                     TEXT,
+    "start"                   TEXT,
+    "end"                     TEXT,
+    quantity                  TEXT,
+    shape                     TEXT,
+    model                     TEXT,
+    so_called                 TEXT,
+    type                      TEXT,
+    jewels                    TEXT,
+    calibre                   TEXT,
+    found                     TEXT,
+    mvt_number                TEXT,
+    comment                   TEXT,
+    "case"                    TEXT,
+    size                      TEXT,
+    height                    TEXT,
+    weight                    TEXT,
+    "key"                     TEXT,
+    lugs_pdt                  TEXT,
+    gauge                     TEXT,
+    bezel                     TEXT,
+    dial                      TEXT,
+    code                      TEXT,
+    stern                     TEXT,
+    idx                       TEXT,
+    hands                     TEXT,
+    more_comment              TEXT,
+    retail_08                 TEXT,
+    last_retail_or_appearance TEXT,
+    y2017                     TEXT,
+    y2015_2016                TEXT,
+    y2013_2014                TEXT,
+    y2011_2012                TEXT,
+    y2009_2010                TEXT,
+    y2008                     TEXT,
+    y2007                     TEXT,
+    y2006                     TEXT,
+    y2005                     TEXT,
+    y2004                     TEXT,
+    y2003                     TEXT,
+    y2002                     TEXT,
+    y2001                     TEXT,
+    y2000                     TEXT,
+    y1999                     TEXT,
+    y1998                     TEXT,
+    y1997                     TEXT,
+    y1996                     TEXT,
+    y1995                     TEXT,
+    y1994                     TEXT,
+    y1993                     TEXT,
+    y1992                     TEXT,
+    y1991                     TEXT,
+    y1990                     TEXT,
+    y1988                     TEXT,
+    y1986                     TEXT,
+    y1984                     TEXT,
+    y1982                     TEXT,
+    y1980                     TEXT,
+    y1977                     TEXT,
+    y1974                     TEXT,
+    y1970                     TEXT,
+    y1965                     TEXT,
+    y1960                     TEXT,
+    y1955                     TEXT,
+    y1950                     TEXT,
+    y1945                     TEXT,
+    y1940                     TEXT,
+    y1935                     TEXT,
+    y1930                     TEXT,
+    y1920                     TEXT,
+    y1910                     TEXT,
+    y1900                     TEXT,
+    y1875                     TEXT,
+    y1850                     TEXT
+);
+
+CREATE TABLE watch
+(
+    id                        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_reference_variant      UUID REFERENCES reference_variant,
+    fk_no_reference_info      UUID REFERENCES no_reference_info,
+    fk_maker                  UUID REFERENCES maker, --is set when vwe_ref is empty
+    case_lower_range          text,
+    case_number               text,
+    case_upper_range          text,
+    comment                   text,
+    has_been_changed          boolean,
+    is_fake                   boolean,
+    is_unknown_exact_case     boolean,
+    is_unknown_exact_movement boolean,
+    movement_lower_range      text,
+    movement_number           text,
+    movement_upper_range      text,
+    is_verified               boolean,
+    quantity_produced         smallint,
+    needs_manual_verification boolean,
+    search_idx                tsvector
+                              GENERATED ALWAYS AS (
+                                          setweight(to_tsvector('pg_catalog.english',
+                                                                coalesce(movement_number, '')),
+                                                    'A') ||
+                                          setweight(to_tsvector('pg_catalog.english',
+                                                                coalesce(case_number, '')),
+                                                    'B') ||
+                                          setweight(to_tsvector('pg_catalog.english',
+                                                                coalesce(comment, '')),
+                                                    'D')
+                                  ) STORED,
+    UNIQUE (movement_number, case_number)
+);
+CREATE INDEX watch_search_idx ON watch USING GIN (search_idx);
+
+CREATE TABLE vwe_auction_lot
+(
+    id                     UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_auction             UUID REFERENCES vwe_auction,
+    fk_watch               UUID REFERENCES watch,
+    additional_information boolean,
+    bracelet_type          text,
+    certificate_retailer   text,
+    comment                text,
+    currency               currencycode,
+    estimate_from          numeric,
+    estimate_from_in_usd   numeric,
+    estimate_to            numeric,
+    estimate_to_in_usd     numeric,
+    has_box                boolean,
+    has_bracelet           boolean,
+    has_certificate        boolean,
+    has_extra_item         boolean,
+    has_not_been_sold      boolean,
+    is_empty_price         boolean,
+    is_extract_of_archives boolean,
+    lot_number             integer,
+    lot_number_addition    text,
+    price                  numeric,
+    price_in_usd           numeric,
+    price_estimated        numeric,
+    was_withdrawn          boolean,
+    is_verified            boolean,
+    conversion_date        date,
+    conversion_rate        numeric
+);
+
+CREATE TABLE vwe_condition
+(
+    id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_auctionLot        UUID REFERENCES vwe_auction_lot,
+    "date"               date,
+    bracelet_type        text,
+    case_condition       text,
+    case_rating          smallint,
+    certificate_retailer text,
+    description          text,
+    dial_condition       text,
+    dial_rating          smallint,
+    has_box              boolean,
+    has_bracelet         boolean,
+    has_certificate      boolean,
+    has_extra_item       boolean,
+    movement_condition   text,
+    movement_rating      smallint
+);
+
+CREATE TABLE abbreviation
+(
+    id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    abbreviation text,
+    translation  text,
+    UNIQUE (abbreviation)
+);
+
+
+
+CREATE TABLE watch_feature
+(
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_watch        UUID references watch,
+    fk_abbreviation UUID
+);
+
+CREATE TABLE event_description
+(
+    id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    short_description text,
+    description       text
+);
+
+CREATE TABLE event
+(
+    id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fk_watch             UUID REFERENCES watch,
+    fk_auction_lot       UUID REFERENCES vwe_auction_lot,
+    fk_event_description UUID REFERENCES event_description,
+    date                 date,
+    date_precision       date_precision
+);
+
+CREATE TABLE exchange_rate
+(
+    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    currency      currencycode,
+    base_currency currencycode     DEFAULT 'USD',
+    date          date,
+    value         numeric,
+    UNIQUE (currency, base_currency, date, value)
+);
+
+CREATE TABLE keymaker
+(
+    id             uuid primary key default gen_random_uuid(),
+    number         integer not null,
+    name           text    not null,
+    corporate_form text,
+    marque         text,
+    location       text    not null,
+    residence      text
+)

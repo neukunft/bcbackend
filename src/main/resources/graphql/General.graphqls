@@ -1,19 +1,15 @@
-# a globally unique ID
-scalar UUID
-
 # Return an Auction House and it's globally unique ID
 type Query {
     getAuctionHouses: [AuctionHouse]
     getAuctionHouseLocations: [AuctionHouseLocation]
     getLocations: [Location]
-    getAuctions: [Auction]
 }
 
 type Mutation {
     #adds a new auction house
-    setAuctionHouse(
+    auctionHouse(
         name: String,
         url: String,
         description: String
-    ): UUID
+    ): ID
 }

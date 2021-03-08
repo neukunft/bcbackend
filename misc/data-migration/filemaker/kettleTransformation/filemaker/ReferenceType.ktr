@@ -473,13 +473,13 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
+    <connection>docker_database</connection>
     <execute_each_row>N</execute_each_row>
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
-    <sql>DROP TABLE IF EXISTS import.referencetype;
-CREATE TABLE IF NOT EXISTS import.referencetype
+    <sql>DROP TABLE IF EXISTS vwe.referencetype;
+CREATE TABLE IF NOT EXISTS vwe.referencetype
 (
   calibre TEXT
 , "class" TEXT
@@ -539,10 +539,10 @@ CREATE TABLE IF NOT EXISTS import.referencetype
 , retailPrice2008 TEXT
 , lastRetailOrAppearance TEXT
 , clear_variant_name TEXT
-, fk_reference_series_model UUID REFERENCES import.reference_series_model
+, fk_reference_series_model UUID REFERENCES vwe.reference_series_model
 )
 ;
-TRUNCATE TABLE import.referencetype;
+TRUNCATE TABLE vwe.referencetype;
 </sql>
     <set_params>N</set_params>
     <insert_field />
@@ -1347,8 +1347,8 @@ TRUNCATE TABLE import.referencetype;
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
-    <schema>import</schema>
+    <connection>docker_database</connection>
+    <schema>vwe</schema>
     <table>referencetype</table>
     <commit>1000</commit>
     <truncate>Y</truncate>

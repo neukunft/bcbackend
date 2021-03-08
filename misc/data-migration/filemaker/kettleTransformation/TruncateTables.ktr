@@ -436,14 +436,14 @@
   <notepads>
   </notepads>
   <connection>
-    <name>docker</name>
+    <name>docker_database</name>
     <server>localhost</server>
     <type>POSTGRESQL</type>
     <access>Native</access>
-    <database>fusee</database>
+    <database>bluecat</database>
     <port>5432</port>
     <username>dbuser</username>
-    <password>Encrypted 2be98afc86aa79491b81c8b238ec2ff9b</password>
+    <password>Encrypted 2be98afc86aa7f2e4af1bbe71cd81b8de</password>
     <servername />
     <data_tablespace />
     <index_tablespace />
@@ -467,14 +467,15 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
+    <connection>docker_database</connection>
     <execute_each_row>N</execute_each_row>
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
-    <sql>TRUNCATE TABLE import.reference cascade;
-TRUNCATE TABLE import.reference_series cascade;
-TRUNCATE TABLE import.reference_series_model cascade;</sql>
+    <sql>CREATE SCHEMA IF NOT EXISTS vwe;
+TRUNCATE TABLE vwe.reference cascade;
+TRUNCATE TABLE vwe.reference_series cascade;
+TRUNCATE TABLE vwe.reference_series_model cascade;</sql>
     <set_params>N</set_params>
     <insert_field />
     <update_field />

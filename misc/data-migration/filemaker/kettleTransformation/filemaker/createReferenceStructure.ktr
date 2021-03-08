@@ -468,37 +468,37 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
+    <connection>docker_database</connection>
     <execute_each_row>N</execute_each_row>
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
     <sql>-------- Create helper Tables --------
-CREATE SCHEMA IF NOT EXISTS import;
+CREATE SCHEMA IF NOT EXISTS vwe;
 
-DROP TABLE IF EXISTS import.reference CASCADE;
+DROP TABLE IF EXISTS vwe.reference CASCADE;
 
-CREATE TABLE IF NOT EXISTS import.reference
+CREATE TABLE IF NOT EXISTS vwe.reference
 (
     id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     name varchar(10) UNIQUE
 );
 
-DROP TABLE IF EXISTS import.reference_series CASCADE;
+DROP TABLE IF EXISTS vwe.reference_series CASCADE;
 
-CREATE TABLE IF NOT EXISTS import.reference_series
+CREATE TABLE IF NOT EXISTS vwe.reference_series
 (
     id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    fk_reference uuid REFERENCES import.reference,
+    fk_reference uuid REFERENCES vwe.reference,
     series       smallint
 );
 
-DROP TABLE IF EXISTS import.reference_series_model CASCADE;
+DROP TABLE IF EXISTS vwe.reference_series_model CASCADE;
 
-CREATE TABLE IF NOT EXISTS import.reference_series_model
+CREATE TABLE IF NOT EXISTS vwe.reference_series_model
 (
     id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    fk_series        uuid REFERENCES import.reference_series,
+    fk_series        uuid REFERENCES vwe.reference_series,
     metal_identifier varchar(20),
     UNIQUE (fk_series, metal_identifier)
 );</sql>

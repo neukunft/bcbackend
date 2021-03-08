@@ -1,8 +1,8 @@
 type Auction{
-    id: UUID!
+    id: ID!
     auctionHouseLocation: AuctionHouseLocation
-    catalogFile: File
-    resultFile: File
+#    catalogFile: File
+#    resultFile: File
     dateFrom: String
     dateTo: String
     title: String
@@ -16,6 +16,19 @@ type Auction{
     filemakerRecord: String
     isOnlineOnly: Boolean
     requiresManualAttention: Boolean
-    filemakerId: UUID
+    filemakerId: ID
     wasOnlySourceFilemaker: Boolean
+}
+
+#type AuctionList{
+#    id: ID!
+#    dateFrom: String
+#    dateTo: String
+#    auctionHouseLocation: AuctionHouseLocation
+#}
+
+extend type Query {
+    auctions(count: Int, offset: Int): [Auction]
+    upcomingAuctions(date: String): [Auction]
+    auction(id: ID): Auction
 }

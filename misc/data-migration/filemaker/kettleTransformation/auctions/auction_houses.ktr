@@ -473,7 +473,7 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <filename>/Volumes/media/fusee/DATA_IMPORT/bluecat/fusee_public_auction_house.csv</filename>
+    <filename>/Volumes/media/fusee/DATA_IMPORT/bluecat/auction_house.csv</filename>
     <filename_field />
     <rownum_field />
     <include_filename>N</include_filename>

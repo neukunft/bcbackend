@@ -473,12 +473,12 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
+    <connection>docker_database</connection>
     <execute_each_row>N</execute_each_row>
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
-    <sql>CREATE TABLE IF NOT EXISTS import.no_ref_watch
+    <sql>CREATE TABLE IF NOT EXISTS vwe.no_ref_watch
 (
   id TEXT
 , fk_no_ref TEXT
@@ -655,8 +655,8 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
-    <schema>import</schema>
+    <connection>docker_database</connection>
+    <schema>vwe</schema>
     <table>no_ref_watch</table>
     <commit>5000</commit>
     <truncate>Y</truncate>

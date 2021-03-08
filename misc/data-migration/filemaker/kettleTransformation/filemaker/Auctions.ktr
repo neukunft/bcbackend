@@ -473,13 +473,13 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
+    <connection>docker_database</connection>
     <execute_each_row>N</execute_each_row>
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
-    <sql>DROP TABLE IF EXISTS import.auction;
-CREATE TABLE IF NOT EXISTS import.auction
+    <sql>DROP TABLE IF EXISTS vwe.auction;
+CREATE TABLE IF NOT EXISTS vwe.auction
 (
   checkAuctionUniqueness TEXT
 , CLIPBOARD TEXT
@@ -1045,8 +1045,8 @@ CREATE TABLE IF NOT EXISTS import.auction
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
-    <schema>import</schema>
+    <connection>docker_database</connection>
+    <schema>vwe</schema>
     <table>auction</table>
     <commit>1000</commit>
     <truncate>Y</truncate>

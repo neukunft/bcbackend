@@ -472,12 +472,12 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
+    <connection>docker_database</connection>
     <execute_each_row>N</execute_each_row>
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
-    <sql>CREATE TABLE IF NOT EXISTS import.feature
+    <sql>CREATE TABLE IF NOT EXISTS vwe.feature
 (
   availability TEXT
 , bezel TEXT
@@ -934,8 +934,8 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
-    <schema>import</schema>
+    <connection>docker_database</connection>
+    <schema>vwe</schema>
     <table>feature</table>
     <commit>1000</commit>
     <truncate>Y</truncate>

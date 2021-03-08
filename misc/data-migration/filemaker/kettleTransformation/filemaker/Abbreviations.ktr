@@ -478,7 +478,7 @@
     <single_statement>N</single_statement>
     <replace_variables>N</replace_variables>
     <quoteString>N</quoteString>
-    <sql>CREATE TABLE IF NOT EXISTS import.abbreviation 
+    <sql>CREATE TABLE IF NOT EXISTS vwe.abbreviation 
 (
   abbreviation TEXT
 , CLIPBOARD TEXT
@@ -719,8 +719,8 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>docker</connection>
-    <schema>import</schema>
+    <connection>docker_database</connection>
+    <schema>vwe</schema>
     <table>abbreviation</table>
     <commit>1000</commit>
     <truncate>Y</truncate>

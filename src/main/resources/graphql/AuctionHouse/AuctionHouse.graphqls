@@ -1,5 +1,5 @@
 type AuctionHouse {
-    id: UUID!
+    id: ID!
     # The Auction Houses Name in full
     name: String
     url: String

@@ -1,10 +1,10 @@
 type File {
-    id: UUID!
+    id: ID!
     fileNames: [FileName]
     shasum256: String
     filename: String
 }
 
 extend type Query {
-    getFiles: [File]
+    files: [File]
 }

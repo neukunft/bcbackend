@@ -1,9 +1,9 @@
 type FileName {
-    id: UUID!
+    id: ID!
     file: File
     originalFilename: String
 }
 
 extend type Query {
-    getFileNames: [FileName]
+    fileNames: [FileName]
 }

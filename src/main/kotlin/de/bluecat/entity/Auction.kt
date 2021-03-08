@@ -11,68 +11,68 @@ import javax.persistence.*
 @Entity
 @Table(name = "auction")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType::class)
-open class Auction {
-    @get:Id
-    @get:GeneratedValue
-    @get:Column(name = "id")
-    open var id: UUID? = null
+class Auction(
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    var id: UUID,
 
-    @get:ManyToOne
-    @get:JoinColumn(name = "fk_auction_house_location")
-    open lateinit var auctionHouseLocation: AuctionHouseLocation
+    @ManyToOne
+    @JoinColumn(name = "fk_auction_house_location")
+    var auctionHouseLocation: AuctionHouseLocation,
 
-    @get:ManyToOne
-    @get:JoinColumn(name = "fk_catalog_file")
-    open var catalogFile: File? = null
+//    @ManyToOne
+//    @JoinColumn(name = "fk_catalog_file")
+//    var catalogFile: File? = null,
+//
+//    @ManyToOne
+//    @JoinColumn(name = "fk_result_file")
+//    var resultFile: File? = null,
 
-    @get:ManyToOne
-    @get:JoinColumn(name = "fk_result_file")
-    open var resultFile: File? = null
+    @Column(name = "date_from")
+    var dateFrom: Date?,
 
-    @get:Column(name = "date_from")
-    open var dateFrom: Date? = null
+    @Column(name = "date_to")
+    var dateTo: Date?,
 
-    @get:Column(name = "date_to")
-    open var dateTo: Date? = null
+    @Column(name = "title")
+    var title: String?,
 
-    @get:Column(name = "title")
-    open var title: String? = null
+    @Column(name = "comment")
+    var comment: String?,
 
-    @get:Column(name = "comment")
-    open var comment: String? = null
+    @Column(name = "codename")
+    var codename: String?,
 
-    @get:Column(name = "codename")
-    open var codename: String? = null
+    @Column(name = "total_lots")
+    var totalLots: Int?,
 
-    @get:Column(name = "total_lots")
-    open var totalLots: Int? = null
+    @Column(name = "sale_total")
+    var saleTotal: Int?,
 
-    @get:Column(name = "sale_total")
-    open var saleTotal: Int? = null
+    @Column(name = "url")
+    var url: String?,
 
-    @get:Column(name = "url")
-    open var url: String? = null
+    @Column(name = "was_crawled")
+    var wasCrawled: Boolean?,
 
-    @get:Column(name = "was_crawled")
-    open var wasCrawled: Boolean? = null
+    @Column(name = "web_record", columnDefinition = "jsonb")
+    @Type(type = "jsonb")
+    var webRecord: JsonNode?,
 
-    @get:Column(name = "web_record", columnDefinition = "jsonb")
-    @get:Type(type = "jsonb")
-    open var webRecord: JsonNode? = null
+    @Column(name = "filemaker_record", columnDefinition = "jsonb")
+    @Type(type = "jsonb")
+    var filemakerRecord: JsonNode?,
 
-    @get:Column(name = "filemaker_record", columnDefinition = "jsonb")
-    @get:Type(type = "jsonb")
-    open var filemakerRecord: JsonNode? = null
+    @Column(name = "is_online_only")
+    var isOnlineOnly: Boolean?,
 
-    @get:Column(name = "is_online_only")
-    open var isOnlineOnly: Boolean? = null
+    @Column(name = "requires_manual_attention")
+    var requiresManualAttention: Boolean?,
 
-    @get:Column(name = "requires_manual_attention")
-    open var requiresManualAttention: Boolean? = null
+    @Column(name = "filemaker_id")
+    var filemakerId: UUID?,
 
-    @get:Column(name = "filemaker_id")
-    open var filemakerId: UUID? = null
-
-    @get:Column(name = "was_only_source_filemaker")
-    open var wasOnlySourceFilemaker: Boolean? = null
-}
+    @Column(name = "was_only_source_filemaker")
+    var wasOnlySourceFilemaker: Boolean?
+)
